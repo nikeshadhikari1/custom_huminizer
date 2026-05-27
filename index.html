@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextHumanizer - AI Text Humanizer & Detector</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="currentColor"/>
+                    <path d="M10 16C10 12.6863 12.6863 10 16 10C19.3137 10 22 12.6863 22 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M13 20L16 22L19 20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="16" cy="15" r="1.5" fill="white"/>
+                </svg>
+                <span class="logo-text">TextHumanizer</span>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h1>Humanize your AI writing</h1>
+                <p>Rewrites AI-generated content so it reads as naturally human. Passes every major AI detector with one click.</p>
+                <div class="hero-badges">
+                    <span class="badge">Free plan available</span>
+                    <span class="badge">No credit card required</span>
+                    <span class="badge">Works instantly</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="app-section">
+            <div class="container">
+                <div class="app-grid">
+                    <div class="input-panel">
+                        <div class="panel-header">
+                            <h2>Input Text</h2>
+                            <span class="word-count" id="inputWordCount">0 / 500 words</span>
+                        </div>
+                        <textarea id="inputText" placeholder="Paste your AI-generated text here..." maxlength="5000"></textarea>
+                        <div class="panel-controls">
+                            <div class="rewrite-level">
+                                <label>Rewrite Level:</label>
+                                <div class="level-buttons">
+                                    <button class="level-btn active" data-level="light">Light</button>
+                                    <button class="level-btn" data-level="medium">Medium</button>
+                                    <button class="level-btn" data-level="aggressive">Aggressive</button>
+                                </div>
+                            </div>
+                            <button class="btn-primary" id="humanizeBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                                Humanize Text
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="output-panel">
+                        <div class="panel-header">
+                            <h2>Humanized Output</h2>
+                            <div class="output-actions">
+                                <button class="btn-secondary" id="copyBtn" disabled>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div class="output-content" id="outputContent">
+                            <div class="placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                                <p>Your humanized text will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="detector-section">
+            <div class="container">
+                <h2>AI Detection Score</h2>
+                <div class="detector-grid">
+                    <div class="detector-panel">
+                        <div class="detector-header">
+                            <h3>Original Text</h3>
+                            <button class="btn-scan" id="scanOriginalBtn">Scan for AI</button>
+                        </div>
+                        <div class="score-display" id="originalScore">
+                            <div class="score-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="score-bg" cx="50" cy="50" r="40"/>
+                                    <circle class="score-fill" cx="50" cy="50" r="40" id="originalScoreFill"/>
+                                </svg>
+                                <span class="score-value" id="originalScoreValue">--</span>
+                            </div>
+                            <span class="score-label">No score yet</span>
+                        </div>
+                    </div>
+                    <div class="detector-panel">
+                        <div class="detector-header">
+                            <h3>Humanized Text</h3>
+                            <button class="btn-scan" id="scanHumanizedBtn" disabled>Scan for AI</button>
+                        </div>
+                        <div class="score-display" id="humanizedScore">
+                            <div class="score-circle">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="score-bg" cx="50" cy="50" r="40"/>
+                                    <circle class="score-fill" cx="50" cy="50" r="40" id="humanizedScoreFill"/>
+                                </svg>
+                                <span class="score-value" id="humanizedScoreValue">--</span>
+                            </div>
+                            <span class="score-label">No score yet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="analysis-section" id="analysisSection" style="display: none;">
+            <div class="container">
+                <h2>Deep Scan Analysis</h2>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-dot ai"></span> AI-detected</span>
+                    <span class="legend-item"><span class="legend-dot human"></span> Human-like</span>
+                    <span class="legend-item"><span class="legend-dot mixed"></span> Mixed</span>
+                </div>
+                <div class="analysis-content" id="analysisContent"></div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <h2>Everything you need</h2>
+                <h3>Humanize. Detect. Pass.</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h4>AI Humanizer</h4>
+                        <p>Rewrites AI text with natural human phrasing. Choose light, medium, or aggressive rewrite levels.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                        </div>
+                        <h4>AI Detector</h4>
+                        <p>Scan your text before and after humanizing. See exactly which sentences are flagged.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <h4>Human by Design</h4>
+                        <p>Your text reads as fully human — no AI detection tool will flag it.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                        </div>
+                        <h4>Fast Processing</h4>
+                        <p>Get your humanized text back in seconds, not minutes. Built for speed at scale.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <h4>Deep Scan</h4>
+                        <p>Sentence-by-sentence analysis with color-coded highlights showing exactly what's flagged.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </div>
+                        <h4>Alternative Rewrites</h4>
+                        <p>Click any sentence to choose from multiple alternatives. Fine-tune the output to your voice.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 TextHumanizer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+        <div class="modal" id="rewriteModal">
+            <div class="modal-header">
+                <h3>Alternative Rewrites</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="original-sentence" id="originalSentence"></p>
+                <div class="rewrite-options" id="rewriteOptions"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="humanizer.js"></script>
+</body>
+</html>
